@@ -37,8 +37,8 @@ main(int argc, char * argv[])
    //Test waitpid on a made up pid
    if (waitpid(23456, BLOCK) == -1)
       printf(stdout, "waitpid(23456, BLOCK) passed\n");
-   if (waitpid(23456, NOBLOCK) == -1)
-      printf(stdout, "waitpid(23456, NOBLOCK) passed\n");
+   if (waitpid(23457, NOBLOCK) == -1)
+      printf(stdout, "waitpid(23457, NOBLOCK) passed\n");
    exit();
 }
 
