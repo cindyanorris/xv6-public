@@ -25,7 +25,7 @@ main(int argc, char * argv[])
       if (b == BLOCK) printf(stdout, "BLOCK test\n");  
       else printf(stdout, "NOBLOCK test\n");
 
-      while ((rpid = waitpid(pid, b)) == -1)
+      while ((rpid = waitpid(pid, b)) == 0)
       {
          //you won't see this output for the BLOCK test
          printf(stdout, "Waiting for process %d to finish\n", pid);
