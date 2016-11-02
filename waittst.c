@@ -6,11 +6,12 @@ int
 main(int argc, char * argv[])
 {
    int rpid, pid, i, j;
-   blk_t b = BLOCK;
+   blk_t b[] = { BLOCK, BLOCK, NOBLOCK, NOBLOCK};
 
-   //test waitpid twice
-   //once on BLOCK and once on NOBLOCK
-   for (j = 0; j < 2; j++)
+   //test waitpid four times
+   //twice on BLOCK and twice on NOBLOCK
+   //once each with pid = -1 
+   for (j = 0; j < 4; j++)
    {
       pid = fork();
       if (pid == 0)
@@ -22,17 +23,22 @@ main(int argc, char * argv[])
          exit();
       }
 
-      if (b == BLOCK) printf(stdout, "BLOCK test\n");  
+      if (b[j] == BLOCK) printf(stdout, "BLOCK test\n");  
       else printf(stdout, "NOBLOCK test\n");
 
-      while ((rpid = waitpid(pid, b)) == -1)
+      if ((j % 2) == 1)
+      { 
+         pid = -1;
+         printf(stdout, "Wait for any child\n");
+      }
+
+      while ((rpid = waitpid(pid, b[j])) == 0)
       {
          //you won't see this output for the BLOCK test
          printf(stdout, "Waiting for process %d to finish\n", pid);
          sleep(10);
       }
-      printf(stdout, "Process %d is finished\n", pid);
-      b = NOBLOCK;
+      printf(stdout, "Process %d is finished\n", rpid);
    }
    //Test waitpid on a made up pid
    if (waitpid(23456, BLOCK) == -1)
